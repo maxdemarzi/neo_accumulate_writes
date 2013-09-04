@@ -1,0 +1,8 @@
+source "https://rubygems.org"
+
+gem 'thin'
+#gem 'sinatra'
+gem 'nyny'
+gem 'oj'
+gem 'neography'
+gem 'timers', :git => 'https://github.com/celluloid/timers.git'
