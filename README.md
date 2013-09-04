@@ -8,10 +8,13 @@ POC performance improvement of accumulated writes
 Instructions:
 -------------
 
-Install Neo4j:
+Run the app:
 
+    cd app
+    bundle install
     rake neo4j:install
     rake neo4j:start
+    ruby app.rb
 
 Download and extract Gatling:
 
