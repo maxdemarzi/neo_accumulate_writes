@@ -5,6 +5,18 @@ $neo = Neography::Rest.new
 $queue = []
 $count = 0
 
+# Start and Configure RabbitMQ
+connection = Bunny.new
+connection.start
+PREFETCH=100
+
+# Create Channel
+channel = connection.create_channel
+channel.prefetch(PREFETCH)
+
+# Configure direct exchange
+$exchange = channel.direct("writer")
+
 require 'nyny'
 class App < NYNY::App
   
@@ -52,6 +64,21 @@ class App < NYNY::App
         $queue = []
       end
     'unique nodes created'
+  end  
+
+  post '/evented_nodes' do
+    message = [:create_node, {}]
+    $exchange.publish(message.to_msgpack)
+    'node created'
+  end  
+
+  post '/evented_accumulated_nodes' do
+    $queue << [:create_node, {}]
+      if $queue.size >= 100
+        $exchange.publish($queue.to_msgpack)
+        $queue = []
+      end
+    'nodes created'
   end  
 
 
